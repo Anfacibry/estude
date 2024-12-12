@@ -1,5 +1,6 @@
 import 'package:estude/data/data_constante.dart';
 import 'package:estude/model/disciplina.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -9,7 +10,9 @@ const String tabelaEstudosDisciplina = """
     ${CampTableDatabase.idDisciplina} TEXT,
     ${CampTableDatabase.turno} INTEGER,
     ${CampTableDatabase.tempoHoras} INTEGER,
-    ${CampTableDatabase.tempoMinutos} INTEGER
+    ${CampTableDatabase.tempoMinutos} INTEGER,
+    FOREIGN KEY (${CampTableDatabase.idDisciplina}) 
+    REFERENCES ${CampTableDatabase.tabelaDisciplina} (${CampTableDatabase.id})
     );""";
 
 const String tabelaDisciplina = """
@@ -46,6 +49,36 @@ Future<List<Disciplina>> listaDisciplinas() async {
   final db = await bancoDeDados();
   final List<Map<String, Object?>> toMaps =
       await db.query(CampTableDatabase.tabelaDisciplina);
+  return [
+    for (final {
+          CampTableDatabase.id: id as String,
+          CampTableDatabase.nomeDisciplina: nameDisciplina as String,
+          CampTableDatabase.nomeProfessor: professor as String,
+        } in toMaps)
+      Disciplina(id: id, nomeDisciplina: nameDisciplina, professor: professor)
+  ];
+}
+
+String joinPego = """
+SELECT ${CampTableDatabase.tabelaDisciplina}.${CampTableDatabase.nomeDisciplina},
+${CampTableDatabase.tabelaDisciplina}.${CampTableDatabase.nomeProfessor},
+${CampTableDatabase.tabelaEstudoDisciplina}.${CampTableDatabase.id},
+${CampTableDatabase.tabelaEstudoDisciplina}.${CampTableDatabase.turno},
+${CampTableDatabase.tabelaEstudoDisciplina}.${CampTableDatabase.tempoHoras},
+${CampTableDatabase.tabelaEstudoDisciplina}.${CampTableDatabase.tempoMinutos}
+FROM ${CampTableDatabase.tabelaEstudoDisciplina}
+INNER JOIN ${CampTableDatabase.tabelaDisciplina} ON 
+${CampTableDatabase.tabelaEstudoDisciplina}.${CampTableDatabase.idDisciplina} = 
+${CampTableDatabase.tabelaDisciplina}.${CampTableDatabase.id};
+""";
+
+String selectFrom = "SELECT * FROM ${CampTableDatabase.tabelaEstudoDisciplina}";
+
+///Teste de join
+Future<List<Disciplina>> listaFiltrada() async {
+  final db = await bancoDeDados();
+  final List<Map<String, Object?>> toMaps = await db.rawQuery(joinPego);
+  debugPrint("Chegou aqui ${toMaps.toString()}");
   return [
     for (final {
           CampTableDatabase.id: id as String,
