@@ -1,6 +1,6 @@
-import 'package:estude/screens/navegation_screens.dart/navigation_screens.dart';
-import 'package:estude/store/store_lista_estudo_cronograma.dart';
-import 'package:estude/store/store_state.dart';
+import 'package:estude/domain/store/store_lista_estudo_cronograma.dart';
+import 'package:estude/domain/store/store_state.dart';
+import 'package:estude/ui/screens/navigation_screens.dart';
 import 'package:estude/utils/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
