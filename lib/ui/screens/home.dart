@@ -20,7 +20,6 @@ class Home extends StatelessWidget {
         Provider.of<StoreListaEstudoCronograma>(context, listen: false);
     final int media =
         lista.manha.length + lista.tarde.length + lista.noite.length;
-    debugPrint(media.toStringAsFixed(2));
     return SizedBox(
         height: size.height,
         width: size.width,

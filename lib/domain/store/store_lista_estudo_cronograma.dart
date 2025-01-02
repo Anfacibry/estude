@@ -14,8 +14,7 @@ abstract class _StoreListaEstudoCronograma with Store {
     idDisciplina: "",
     dia: [],
     turno: 0,
-    tempo: 0,
-    tempoEstudadoDia: 0,
+    tempo: "",
   );
 
   @action

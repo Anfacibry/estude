@@ -1,35 +1,37 @@
+import 'dart:typed_data';
+
+import 'package:estude/data/model/disciplina.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../utils/data_constante.dart';
 
-class EstudoDisciplina {
+class EstudoDisciplina extends Disciplina {
   final String idEstudoDisciplina;
-  final String idDisciplina;
   final List<int> dia;
   final int turno;
-  int tempoEstudadoDia;
-  final int tempo;
+  final String tempo;
 
   EstudoDisciplina({
     required this.idEstudoDisciplina,
-    required this.idDisciplina,
+    super.idDisciplina = "",
+    super.nomeDisciplina = "",
+    super.professor = "",
     required this.dia,
     required this.turno,
-    this.tempoEstudadoDia = 0,
     required this.tempo,
   });
 
+  @override
   Map<String, Object?> toMap() => {
         CampTableDatabase.idEstudoDisciplina: idEstudoDisciplina,
         CampTableDatabase.idDisciplina: idDisciplina,
         CampTableDatabase.dia: Uint8List.fromList(dia),
         CampTableDatabase.turno: turno,
         CampTableDatabase.tempo: tempo,
-        CampTableDatabase.tempoEstudadoDia: tempoEstudadoDia,
       };
 
   @override
   String toString() {
-    return "ID: $idEstudoDisciplina, nome_disciplina: ****, Professor: **** Turno: $turno, Tempo: $tempo, TempoEstudadoDia: $tempoEstudadoDia";
+    return "Id_Estudo_Disciplina: $idEstudoDisciplina, id_Disciplina $idDisciplina, nome_disciplina: $nomeDisciplina, Professor: $professor Turno: $turno, Tempo: $tempo, dia: $dia";
   }
 }

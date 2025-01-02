@@ -1,8 +1,5 @@
-import 'package:estude/data/repositories/db_estudo_disciplina.dart';
-
 import 'package:estude/data/model/estudo_disciplina.dart';
 import 'package:estude/data/services/obtendo_dados.dart';
-import 'package:estude/domain/store/store_lista_estudo_cronograma.dart';
 import 'package:estude/ui/widgets/card_diciplinas_turnos.dart';
 
 import 'package:estude/domain/store/store_state.dart';
@@ -28,44 +25,10 @@ class Cronograma extends StatefulWidget {
 class _CronogramaState extends State<Cronograma> {
   @override
   Widget build(BuildContext context) {
-    // listaFiltrada();
+    listaFiltrada();
     final ({double height, double width}) size =
         AppResponsiv.sizeLayout(context);
     final StoreState state = Provider.of<StoreState>(context, listen: false);
-    final StoreListaEstudoCronograma storeListaEstudoCronograma =
-        Provider.of(context, listen: false);
-
-    void funEstudoDisciplina() {
-      EstudoDisciplina estudo = EstudoDisciplina(
-          idEstudoDisciplina: state.idEstudoDisciplina,
-          idDisciplina: state.idDisciplina,
-          turno: state.turnoEscolhido,
-          dia: [],
-          tempo: state.horas,
-          tempoEstudadoDia: state.minuto);
-      storeListaEstudoCronograma.pegandoEstudoDisciplina(estudo);
-      setState(() {
-        atualizandoEstudoDisciplina(
-            storeListaEstudoCronograma.estudoDisciplina);
-
-        Navigator.pop(context);
-      });
-    }
-
-    void deletando() {
-      EstudoDisciplina estudo = EstudoDisciplina(
-          idEstudoDisciplina: state.idEstudoDisciplina,
-          idDisciplina: state.idDisciplina,
-          turno: state.turnoEscolhido,
-          dia: [],
-          tempo: state.horas,
-          tempoEstudadoDia: state.minuto);
-      storeListaEstudoCronograma.pegandoEstudoDisciplina(estudo);
-      setState(() {
-        deletarEstudoDisciplina(storeListaEstudoCronograma.estudoDisciplina);
-        Navigator.pop(context);
-      });
-    }
 
     return Scaffold(
       body: SizedBox(
@@ -100,24 +63,25 @@ class _CronogramaState extends State<Cronograma> {
                       ),
                     ),
                     PopupMenuButton(
-                        icon: Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: constraints.maxHeight * .8,
-                        ),
-                        itemBuilder: (context) => [
-                              for (DateTime nome in listaDatas)
-                                PopupMenuItem(
-                                  child: Text(
-                                    DateFormat("EEEE", "pt-BR").format(nome),
-                                    style: AppStyleText.textoOnPrimary(
-                                        context: context),
-                                  ),
-                                  onTap: () {
-                                    state.escolhendoNomeSemana(nome);
-                                  },
-                                )
-                            ])
+                      icon: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        size: constraints.maxHeight * .8,
+                      ),
+                      itemBuilder: (context) => [
+                        for (DateTime nome in listaDatas)
+                          PopupMenuItem(
+                            child: Text(
+                              DateFormat("EEEE", "pt-BR").format(nome),
+                              style:
+                                  AppStyleText.textoOnPrimary(context: context),
+                            ),
+                            onTap: () {
+                              state.escolhendoNomeSemana(nome);
+                            },
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -135,7 +99,7 @@ class _CronogramaState extends State<Cronograma> {
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(size.width * .1))),
                 child: FutureBuilder(
-                    future: listaEstudoDisciplinas(),
+                    future: listaFiltrada(),
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.done:
@@ -157,8 +121,8 @@ class _CronogramaState extends State<Cronograma> {
                                               turno: "Manhã",
                                               height: size.height,
                                               width: size.width,
-                                              funDeletar: deletando,
-                                              fun: funEstudoDisciplina,
+                                              funDeletar: () {},
+                                              fun: () {},
                                             )
                                           : const SizedBox(),
                                       AppResponsiv.paddingTop(
@@ -171,8 +135,8 @@ class _CronogramaState extends State<Cronograma> {
                                               turno: "Tarde",
                                               height: size.height,
                                               width: size.width,
-                                              funDeletar: deletando,
-                                              fun: funEstudoDisciplina,
+                                              funDeletar: () {},
+                                              fun: () {},
                                             )
                                           : const SizedBox(),
                                       AppResponsiv.paddingTop(
@@ -185,16 +149,25 @@ class _CronogramaState extends State<Cronograma> {
                                               turno: "Noite",
                                               height: size.height,
                                               width: size.width,
-                                              funDeletar: deletando,
-                                              fun: funEstudoDisciplina,
+                                              funDeletar: () {},
+                                              fun: () {},
                                             )
                                           : const SizedBox(),
                                     ],
                                   ),
                                 )
-                              : const Center(
-                                  child: Text("Lista vazia"),
+                              : Center(
+                                  child: Text(
+                                    "Lista vazia",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer,
+                                    ),
+                                  ),
                                 );
+
                         case ConnectionState.waiting:
                           return const Center(
                             child: CircularProgressIndicator(),
@@ -224,20 +197,6 @@ class _CronogramaState extends State<Cronograma> {
               funDelete: () {},
               height: size.height,
               width: size.width,
-              fun: () {
-                EstudoDisciplina estudoDisciplina = EstudoDisciplina(
-                  idEstudoDisciplina: uuid.v8(),
-                  idDisciplina: state.idDisciplina,
-                  turno: state.turnoEscolhido,
-                  dia: [1, 6, 7],
-                  tempo: state.horas,
-                  tempoEstudadoDia: state.horas,
-                );
-                setState(() {
-                  insertEstudoDisciplina(estudoDisciplina);
-                });
-                Navigator.pop(context);
-              },
             ),
           );
         },

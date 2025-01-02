@@ -17,6 +17,7 @@ class ScreenDisciplinas extends StatefulWidget {
 class _ScreenDisciplinasState extends State<ScreenDisciplinas> {
   @override
   Widget build(BuildContext context) {
+    listaFiltrada();
     final ({double height, double width}) size =
         AppResponsiv.sizeLayout(context);
     TextEditingController textEditingControllerDisciplina =

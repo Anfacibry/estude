@@ -32,8 +32,7 @@ class CampTableDatabase {
     $idDisciplina TEXT,
     $dia TEXT,
     $turno INTEGER,
-    $tempo INTEGER,
-    $tempoEstudadoDia INTEGER,
+    $tempo TEXT,
     FOREIGN KEY ($idDisciplina) 
     REFERENCES $nomeTbDisciplina ($idDisciplina)
     );""";
@@ -44,12 +43,12 @@ class CampTableDatabase {
   SELECT $nomeTbDisciplina.$nomeDisciplina,
   $nomeTbDisciplina.$nomeProfessor,
   $nomeTbEstudoDisciplina.$idEstudoDisciplina,
-  $nomeTbEstudoDisciplina.turno,
-  $nomeTbEstudoDisciplina.tempo,
-  $nomeTbEstudoDisciplina.CampTableDatabase.dia
-  FROM $nomeTbEstudoDisciplina.
-  INNER JOIN $nomeTbDisciplina ON 
-  $nomeTbEstudoDisciplina.$idEstudoDisciplina = 
+  $nomeTbEstudoDisciplina.$turno,
+  $nomeTbEstudoDisciplina.$tempo,
+  $nomeTbEstudoDisciplina.$dia
+  FROM $nomeTbDisciplina
+  INNER JOIN $nomeTbEstudoDisciplina ON 
+  $nomeTbEstudoDisciplina.$idDisciplina = 
   $nomeTbDisciplina.$idDisciplina;
   """;
 }

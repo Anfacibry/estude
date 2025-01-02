@@ -67,10 +67,8 @@ class _CardDiciplinasTurnosState extends State<CardDiciplinasTurnos> {
                       onTap: () {
                         storeState.selecionandoIdDisciplina(
                             widget.estudoDisciplinas[i].idDisciplina);
-                        storeState.selecionandoHoras(
+                        storeState.selecionandoTempo(
                             widget.estudoDisciplinas[i].tempo);
-                        storeState.selecionandoMinutos(
-                            widget.estudoDisciplinas[i].tempoEstudadoDia);
                         storeState
                             .escolhendoTurno(widget.estudoDisciplinas[i].turno);
                         storeState.pegandoId(
@@ -84,15 +82,13 @@ class _CardDiciplinasTurnosState extends State<CardDiciplinasTurnos> {
                             funDelete: widget.funDeletar,
                             height: widget.height,
                             width: widget.width,
-                            fun: widget.fun,
                           ),
                         );
                       },
                       child: CardDisciplinaPega(
-                        disciplina: "En análise",
+                        disciplina: widget.estudoDisciplinas[i].nomeDisciplina,
                         isEstudando: false,
-                        horasMinutos:
-                            "${widget.estudoDisciplinas[i].tempo}h${widget.estudoDisciplinas[i].tempo == 0 ? "" : widget.estudoDisciplinas[i].tempo}",
+                        horasMinutos: widget.estudoDisciplinas[i].tempo,
                         height: constraints.maxHeight,
                         width: constraints.maxWidth,
                       ),

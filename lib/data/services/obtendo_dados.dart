@@ -1,6 +1,5 @@
 import 'package:estude/data/model/disciplina.dart';
 import 'package:estude/utils/data_constante.dart';
-import 'package:flutter/material.dart';
 
 import '../model/estudo_disciplina.dart';
 import '../repositories/database.dart';
@@ -28,7 +27,6 @@ Future<List<List<EstudoDisciplina>>> listaEstudoDisciplinas() async {
   final db = await bancoDeDados();
   final List<Map<String, Object?>> toMaps =
       await db.query(CampTableDatabase.nomeTbEstudoDisciplina);
-  debugPrint(toMaps.toString());
 
   List<EstudoDisciplina> lista = [
     for (final {
@@ -36,16 +34,15 @@ Future<List<List<EstudoDisciplina>>> listaEstudoDisciplinas() async {
           CampTableDatabase.idDisciplina: idDisciplina as String,
           CampTableDatabase.dia: dia as List<int>,
           CampTableDatabase.turno: turno as int,
-          CampTableDatabase.tempo: tempo as int,
-          CampTableDatabase.tempoEstudadoDia: tempoEstudoDia as int
+          CampTableDatabase.tempo: tempo as String,
         } in toMaps)
       EstudoDisciplina(
-          idEstudoDisciplina: idEstudoDisciplina,
-          idDisciplina: idDisciplina,
-          dia: dia,
-          turno: turno,
-          tempo: tempo,
-          tempoEstudadoDia: tempoEstudoDia)
+        idEstudoDisciplina: idEstudoDisciplina,
+        idDisciplina: idDisciplina,
+        dia: dia,
+        turno: turno,
+        tempo: tempo,
+      )
   ];
   List<EstudoDisciplina> manha = lista.where((dis) => dis.turno == 1).toList();
   List<EstudoDisciplina> tarde = lista.where((dis) => dis.turno == 2).toList();
@@ -59,20 +56,37 @@ Future<List<List<EstudoDisciplina>>> listaEstudoDisciplinas() async {
 }
 
 ///Teste de join
-Future<List<Disciplina>> listaFiltrada() async {
+Future<List<List<EstudoDisciplina>>> listaFiltrada() async {
   final db = await bancoDeDados();
   final List<Map<String, Object?>> toMaps =
       await db.rawQuery(CampTableDatabase.innerJoinEstudoDisciplinaEDisciplina);
-  debugPrint("Chegou aqui ${toMaps.toString()}");
-  return [
+  List<EstudoDisciplina> lista = [
     for (final {
-          CampTableDatabase.idDisciplina: idDisciplina as String,
-          CampTableDatabase.nomeDisciplina: nameDisciplina as String,
-          CampTableDatabase.nomeProfessor: professor as String,
+          CampTableDatabase.idEstudoDisciplina: idEstudoDisciplina as String,
+          CampTableDatabase.nomeDisciplina: nomeDisciplina as String,
+          CampTableDatabase.nomeProfessor: nomeProfessor as String,
+          CampTableDatabase.dia: dia as List<int>,
+          CampTableDatabase.turno: turno as int,
+          CampTableDatabase.tempo: tempo as String,
         } in toMaps)
-      Disciplina(
-          idDisciplina: idDisciplina,
-          nomeDisciplina: nameDisciplina,
-          professor: professor)
+      EstudoDisciplina(
+        idEstudoDisciplina: idEstudoDisciplina,
+        nomeDisciplina: nomeDisciplina,
+        professor: nomeProfessor,
+        dia: dia,
+        turno: turno,
+        tempo: tempo,
+      )
+  ];
+  List<EstudoDisciplina> manha = lista.where((dis) => dis.turno == 1).toList();
+
+  List<EstudoDisciplina> tarde = lista.where((dis) => dis.turno == 2).toList();
+
+  List<EstudoDisciplina> noite = lista.where((dis) => dis.turno == 3).toList();
+
+  return [
+    manha,
+    tarde,
+    noite,
   ];
 }

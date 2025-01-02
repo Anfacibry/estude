@@ -88,33 +88,18 @@ mixin _$StoreState on _StoreState, Store {
     });
   }
 
-  late final _$horasAtom = Atom(name: '_StoreState.horas', context: context);
+  late final _$tempoAtom = Atom(name: '_StoreState.tempo', context: context);
 
   @override
-  int get horas {
-    _$horasAtom.reportRead();
-    return super.horas;
+  String get tempo {
+    _$tempoAtom.reportRead();
+    return super.tempo;
   }
 
   @override
-  set horas(int value) {
-    _$horasAtom.reportWrite(value, super.horas, () {
-      super.horas = value;
-    });
-  }
-
-  late final _$minutoAtom = Atom(name: '_StoreState.minuto', context: context);
-
-  @override
-  int get minuto {
-    _$minutoAtom.reportRead();
-    return super.minuto;
-  }
-
-  @override
-  set minuto(int value) {
-    _$minutoAtom.reportWrite(value, super.minuto, () {
-      super.minuto = value;
+  set tempo(String value) {
+    _$tempoAtom.reportWrite(value, super.tempo, () {
+      super.tempo = value;
     });
   }
 
@@ -241,22 +226,11 @@ mixin _$StoreState on _StoreState, Store {
   }
 
   @override
-  void selecionandoHoras(int horasPegas) {
+  void selecionandoTempo(String tempoPego) {
     final _$actionInfo = _$_StoreStateActionController.startAction(
-        name: '_StoreState.selecionandoHoras');
+        name: '_StoreState.selecionandoTempo');
     try {
-      return super.selecionandoHoras(horasPegas);
-    } finally {
-      _$_StoreStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void selecionandoMinutos(int minutosPego) {
-    final _$actionInfo = _$_StoreStateActionController.startAction(
-        name: '_StoreState.selecionandoMinutos');
-    try {
-      return super.selecionandoMinutos(minutosPego);
+      return super.selecionandoTempo(tempoPego);
     } finally {
       _$_StoreStateActionController.endAction(_$actionInfo);
     }
@@ -314,8 +288,7 @@ isEstudoConcluido: ${isEstudoConcluido},
 isPlay: ${isPlay},
 idDisciplina: ${idDisciplina},
 nomdeDisciplina: ${nomdeDisciplina},
-horas: ${horas},
-minuto: ${minuto},
+tempo: ${tempo},
 turnoEscolhido: ${turnoEscolhido},
 idEstudoDisciplina: ${idEstudoDisciplina},
 diaEscolhido: ${diaEscolhido},

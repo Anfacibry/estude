@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/repositories/db_estudo_disciplina.dart';
+import '../../utils/data_constante.dart';
 import '../../utils/theme/app_color.dart';
 import '../../utils/theme/app_style_text.dart';
 
@@ -16,7 +18,6 @@ class AlertDialogCronograma extends StatelessWidget {
   final double width;
   final bool isEditarDisciplinaCronograma;
   final void Function() funDelete;
-  final void Function() fun;
   final EstudoDisciplina? estudoDisciplina;
   const AlertDialogCronograma({
     required this.height,
@@ -24,7 +25,6 @@ class AlertDialogCronograma extends StatelessWidget {
     required this.isEditarDisciplinaCronograma,
     required this.estudoDisciplina,
     required this.funDelete,
-    required this.fun,
     super.key,
   });
 
@@ -214,8 +214,8 @@ class AlertDialogCronograma extends StatelessWidget {
                       );
                       if (horas != null) {
                         tempo = horas;
-                        storeState.selecionandoHoras(tempo.hour);
-                        storeState.selecionandoMinutos(tempo.minute);
+                        storeState
+                            .selecionandoTempo("${tempo.hour}:${tempo.minute}");
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -225,8 +225,8 @@ class AlertDialogCronograma extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         )),
                     child: Observer(
-                        builder: (context) =>
-                            Text("${storeState.horas}:${storeState.minuto}")),
+                      builder: (context) => Text(storeState.tempo),
+                    ),
                   )
                 ],
               ),
@@ -251,7 +251,33 @@ class AlertDialogCronograma extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
-          onPressed: fun,
+          onPressed: () {
+            if (isEditarDisciplinaCronograma) {
+              EstudoDisciplina estudoDisciplina = EstudoDisciplina(
+                idEstudoDisciplina: storeState.idEstudoDisciplina,
+                idDisciplina: storeState.idDisciplina,
+                turno: storeState.turnoEscolhido,
+                dia: [1, 6, 7],
+                tempo: storeState.tempo,
+              );
+              debugPrint(estudoDisciplina.toString());
+              atualizandoEstudoDisciplina(estudoDisciplina);
+
+              Navigator.pop(context);
+            } else {
+              EstudoDisciplina estudoDisciplina = EstudoDisciplina(
+                idEstudoDisciplina: uuid.v8(),
+                idDisciplina: storeState.idDisciplina,
+                turno: storeState.turnoEscolhido,
+                dia: [1, 6, 7],
+                tempo: storeState.tempo,
+              );
+
+              insertEstudoDisciplina(estudoDisciplina);
+
+              Navigator.pop(context);
+            }
+          },
           child: isEditarDisciplinaCronograma
               ? const Text("Atualizar")
               : const Text("Adicionar"),

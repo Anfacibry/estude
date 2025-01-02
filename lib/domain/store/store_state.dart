@@ -1,3 +1,4 @@
+import 'package:estude/utils/data_constante.dart';
 import 'package:mobx/mobx.dart';
 
 part "store_state.g.dart";
@@ -47,17 +48,10 @@ abstract class _StoreState with Store {
   }
 
   @observable
-  int horas = 0;
+  String tempo = "${dataAtual.hour}:${dataAtual.minute}";
   @action
-  void selecionandoHoras(int horasPegas) {
-    horas = horasPegas;
-  }
-
-  @observable
-  int minuto = 0;
-  @action
-  void selecionandoMinutos(int minutosPego) {
-    minuto = minutosPego;
+  void selecionandoTempo(String tempoPego) {
+    tempo = tempoPego;
   }
 
   @observable

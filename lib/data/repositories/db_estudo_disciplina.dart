@@ -16,6 +16,7 @@ Future<void> insertEstudoDisciplina(EstudoDisciplina estudoDisciplina) async {
     estudoDisciplina.toMap(),
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
+  listaFiltrada();
 }
 
 ///Atualizando estudoDisciplina
@@ -28,6 +29,7 @@ Future<void> atualizandoEstudoDisciplina(
     where: "${CampTableDatabase.idEstudoDisciplina} = ?",
     whereArgs: [estudoDisciplina.idEstudoDisciplina],
   );
+  listaFiltrada();
 }
 
 ///Deletando estudoDisciplina
@@ -38,5 +40,5 @@ Future<void> deletarEstudoDisciplina(EstudoDisciplina estudoDisciplina) async {
     where: "${CampTableDatabase.idEstudoDisciplina} = ?",
     whereArgs: [estudoDisciplina.idEstudoDisciplina],
   );
-  listaEstudoDisciplinas();
+  listaFiltrada();
 }
